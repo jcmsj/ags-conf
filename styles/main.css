@@ -1,0 +1,24 @@
+/* @define-color primary-color #37B484;
+@define-color secondary-color #E8F0FE;
+@define-color tertiary-color #F7CAC9;
+@define-color accent-color #F44336;
+@define-color neutral-color #212121; */
+
+.taskbar-item {
+    font-size: 1.5rem;
+}
+/* TODO: fix nixos-btn font-size */
+/* .nixos-btn {
+    font-size: 2rem;
+} */
+/* .taskbar-item:hover {
+    background: @primary-color;
+}
+
+.powermenu-btn {
+    background-color: @primary-color;
+} */
+
+.sys-btn {
+    font-size: 2rem;
+}
