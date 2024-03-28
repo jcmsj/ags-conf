@@ -1,6 +1,7 @@
 import Gtk from 'gi://Gtk?version=3.0';
 import { EventBoxProps } from 'types/widgets/eventbox';
 import { RevealerProps } from 'types/widgets/revealer';
+import Win from '../win.js';
 // Given:
 // 1. Window
 // 2. Indicator
@@ -38,7 +39,7 @@ export function createPopup({
                 revealerChild.setValue(!revealerChild.value)
             },
         }),
-        window: (monitor:number) => Widget.Window({
+        window: (monitor:number) => Win({
             ...windowProps,
             name: `${windowProps?.name}-${monitor}`,
             monitor,
@@ -47,7 +48,7 @@ export function createPopup({
             child: Widget.Box({
                 css: "padding: 1px;", 
                 child:revealer
-            })
+            }),
         }),
     }
 }

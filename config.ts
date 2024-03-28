@@ -29,11 +29,18 @@ Utils.monitorFile(
   },
 )
 hyprland.connect("monitor-added", (h, name:string) => {
-  console.log(name)
+  console.log("Added monitor", name)
+  const monitor = hyprland.monitors.find(m => m.name === name)
   // check if taskbar runs in the monitor already:
-  const exists = App.windows.find(w => w.name === `taskBar-${name}`)
-  if (exists) return
+  if (!monitor) {
+    console.log("Monitor is not found", name)
+    return
+  }
+  const exists = App.windows.find(w => w.name === `taskBar-${monitor.id}`)
+  if (exists) {
+    console.log("Taskbar already exists")
+    return
+  }
   // else, add a new taskbar
-  App.addWindow(taskBar(Number(name)))
+  App.addWindow(taskBar(monitor.id))
 })
-

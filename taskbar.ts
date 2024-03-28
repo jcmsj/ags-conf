@@ -5,6 +5,7 @@ import { Client } from "types/service/hyprland"
 import { Clock } from "./time/clock.js"
 import { notificationIndicator } from "./notification.js"
 import { UnifiedPanel } from "./unifiedPanel.js"
+import Win from "./win.js"
 const hyprland = await Service.import('hyprland')
 const apps = await Service.import('applications')
 
@@ -121,7 +122,7 @@ export const taskBar = (monitor: number) => {
     const unifiedPanel = UnifiedPanel()
     App.addWindow(unifiedPanel.window(monitor))
     App.addWindow(clock.window(monitor))
-    return Widget.Window({
+    return Win({
         name: `taskBar-${monitor}`,
         monitor,
         exclusivity: "exclusive",
