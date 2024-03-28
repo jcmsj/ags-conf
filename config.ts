@@ -1,11 +1,16 @@
+import { clock } from "./time/clock.js";
 import { taskBar } from "./taskbar.js";
+import { unifiedPanel } from "./unifiedPanel.js";
 const hyprland = await Service.import('hyprland')
 const styleRoot = `${App.configDir}/styles`
 const css = `${styleRoot}/main.css`
 App.addIcons(`${App.configDir}/assets`)
+
 App.config({ 
     windows: [
       ...hyprland.monitors.map(monitor => taskBar(monitor.id)),
+      ...hyprland.monitors.map(monitor => clock.window(monitor.id)),
+      ...hyprland.monitors.map(monitor => unifiedPanel.window(monitor.id)),
     ], 
     onConfigParsed(app) {
       App.applyCss(css)

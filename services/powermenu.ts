@@ -22,7 +22,7 @@ export class PowerMenu extends Service {
         //     shutdown: [shutdown.value, "Shutdown"],
         // }[action]
         App.closeWindow("powermenu")
-        Utils.exec(Action[action])
+        Utils.execAsync(Action[action])
         // this.notify("cmd")
         // this.notify("title")
         // this.emit("changed")
