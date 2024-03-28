@@ -2,9 +2,9 @@ import { BatteryIndicator } from "./battery.js"
 import { PowerMenuButton } from "./powermenu.js"
 import { Application } from "types/service/applications"
 import { Client } from "types/service/hyprland"
-import { clock } from "./time/clock.js"
+import { Clock } from "./time/clock.js"
 import { notificationIndicator } from "./notification.js"
-import { unifiedPanel } from "./unifiedPanel.js"
+import { UnifiedPanel } from "./unifiedPanel.js"
 const hyprland = await Service.import('hyprland')
 const apps = await Service.import('applications')
 
@@ -116,24 +116,28 @@ function groupedTaskBarItems() {
     })
 }
 
-
-export const taskBar = (monitor: number) => Widget.Window({
-    name: `taskBar-${monitor}`,
-    monitor,
-    exclusivity: "exclusive",
-    anchor: ['bottom', 'left', 'right'],
-    child: Widget.CenterBox({
-        startWidget: Widget.Box({
+export const taskBar = (monitor: number) => {
+    const clock = Clock()
+    const unifiedPanel = UnifiedPanel()
+    App.addWindow(unifiedPanel.window(monitor))
+    App.addWindow(clock.window(monitor))
+    return Widget.Window({
+        name: `taskBar-${monitor}`,
+        monitor,
+        exclusivity: "exclusive",
+        anchor: ['bottom', 'left', 'right'],
+        child: Widget.CenterBox({
+            startWidget: Widget.Box({
                 name: `left-${monitor}`,
                 children: [
                     PowerMenuButton(),
                     groupedTaskBarItems(),
                 ],
             }),
-        centerWidget: Widget.Box({
+            centerWidget: Widget.Box({
                 name: `center-${monitor}`,
             }),
-        endWidget: Widget.Box({
+            endWidget: Widget.Box({
                 name: `right-${monitor}`,
                 spacing: 5,
                 marginEnd: 4,
@@ -145,22 +149,7 @@ export const taskBar = (monitor: number) => Widget.Window({
                     notificationIndicator(),
                 ],
             }),
-    }),
-    setup(self) {
-        self.hook(hyprland, (h, name?:string) => {
-            self.child
-        }, "monitor-added")
-    },
-})
+        }),
+    })
+}
 
-hyprland.connect("monitor-added", (h, name:string) => {
-    console.log(name)
-    // TODO
-    // check if taskbar runs in the monitor already:
-    // if it does, do nothing
-    const exists = App.windows.find(w => w.name === `taskBar-${name}`)
-
-    if (exists) return
-    // else, add a new taskbar
-    App.addWindow(taskBar(Number(name)))
-})

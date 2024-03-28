@@ -40,12 +40,13 @@ export function createPopup({
         }),
         window: (monitor:number) => Widget.Window({
             ...windowProps,
+            name: `${windowProps?.name}-${monitor}`,
             monitor,
             // need to add a padding cause of an ags bug
             // see https://github.com/Aylur/ags/issues/59
-            css: "padding: 1px;", 
             child: Widget.Box({
-                child: revealer,
+                css: "padding: 1px;", 
+                child:revealer
             })
         }),
     }

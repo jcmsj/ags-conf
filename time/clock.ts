@@ -10,10 +10,10 @@ export function ClockIndicator() {
     })
 }
 
-export const clock = createPopup({
+export const Clock = () => createPopup({
     indicator: ClockIndicator(),
     windowProps: {
-        name: 'something',
+        name: 'clock',
         anchor: ['bottom', 'right'],
     },
     revealerProps: {

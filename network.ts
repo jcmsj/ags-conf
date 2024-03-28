@@ -1,15 +1,10 @@
 const network = await Service.import('network');
 
 const bindWifiSSID = () => network.wifi.bind('ssid').as(ssid => ssid || 'Unknown');
-const WifiIndicator = () => Widget.Box({
-    spacing: 2,
+const WifiIndicator = () => Widget.Icon({
     tooltipText: bindWifiSSID(),
-    children: [
-        Widget.Icon({
-            icon: network.wifi.bind('icon_name'),
-        }),
-    ],
-});
+    icon: network.wifi.bind('icon_name'),
+})
 const WiredIndicator = () => Widget.Icon({
     icon: network.wired.bind('icon_name'),
 });

@@ -1,6 +1,4 @@
-import { clock } from "./time/clock.js";
 import { taskBar } from "./taskbar.js";
-import { unifiedPanel } from "./unifiedPanel.js";
 const hyprland = await Service.import('hyprland')
 const styleRoot = `${App.configDir}/styles`
 const css = `${styleRoot}/main.css`
@@ -9,8 +7,6 @@ App.addIcons(`${App.configDir}/assets`)
 App.config({ 
     windows: [
       ...hyprland.monitors.map(monitor => taskBar(monitor.id)),
-      ...hyprland.monitors.map(monitor => clock.window(monitor.id)),
-      ...hyprland.monitors.map(monitor => unifiedPanel.window(monitor.id)),
     ], 
     onConfigParsed(app) {
       App.applyCss(css)
@@ -32,13 +28,12 @@ Utils.monitorFile(
       App.applyCss(css)
   },
 )
+hyprland.connect("monitor-added", (h, name:string) => {
+  console.log(name)
+  // check if taskbar runs in the monitor already:
+  const exists = App.windows.find(w => w.name === `taskBar-${name}`)
+  if (exists) return
+  // else, add a new taskbar
+  App.addWindow(taskBar(Number(name)))
+})
 
-// const botBar = (monitor: number) => Widget.Window({
-//     name: `bar-${monitor}`,
-//     anchor: ['top', 'left', 'right'],
-//     child: Widget.Box({
-//         children: [
-//             NetworkIndicator(),
-//         ],
-//     }),
-// })
