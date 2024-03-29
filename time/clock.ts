@@ -17,7 +17,7 @@ export const Clock = () => createPopup({
         anchor: ['bottom', 'right'],
     },
     revealerProps: {
-        transitionDuration: 300, // in ms
+        transitionDuration: 200, // in ms
         transition: 'slide_up',
     },
     child: Widget.Calendar({

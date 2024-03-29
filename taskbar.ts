@@ -6,6 +6,7 @@ import { Clock } from "./time/clock.js"
 import { notificationIndicator } from "./notification.js"
 import { UnifiedPanel } from "./unifiedPanel.js"
 import Win from "./win.js"
+import { SysTray } from "./systray.js"
 const hyprland = await Service.import('hyprland')
 const apps = await Service.import('applications')
 
@@ -120,8 +121,10 @@ function groupedTaskBarItems() {
 export const taskBar = (monitor: number) => {
     const clock = Clock()
     const unifiedPanel = UnifiedPanel()
+    const systray = SysTray()
     App.addWindow(unifiedPanel.window(monitor))
     App.addWindow(clock.window(monitor))
+    App.addWindow(systray.window(monitor))
     return Win({
         name: `taskBar-${monitor}`,
         monitor,
@@ -144,6 +147,7 @@ export const taskBar = (monitor: number) => {
                 marginEnd: 4,
                 hpack: "end",
                 children: [
+                    systray.indicator,
                     unifiedPanel.indicator,
                     BatteryIndicator(),
                     clock.indicator,

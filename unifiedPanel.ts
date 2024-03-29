@@ -28,7 +28,7 @@ export const UnifiedPanel = () => createPopup({
         anchor: ['bottom','right'],
     },
     revealerProps: {
-        transitionDuration: 300,
+        transitionDuration: 200,
         transition: 'slide_up',
     },
 })

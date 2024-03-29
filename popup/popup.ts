@@ -14,6 +14,7 @@ export function createPopup({
     windowProps,
     revealerProps,
     eventBoxProps,
+    windowChildProps,
     initialyRevealed = false,
 }: {
     child: Gtk.Widget,
@@ -24,6 +25,7 @@ export function createPopup({
     revealerProps: RevealerProps,
     eventBoxProps?: EventBoxProps,
     initialyRevealed?: boolean,
+    windowChildProps?: Parameters<typeof Widget.Box>[0],
 }) {
     const revealerChild = Variable(initialyRevealed)
     const revealer = Widget.Revealer({
@@ -32,6 +34,7 @@ export function createPopup({
         revealChild: revealerChild.bind(),
     })
     return {
+        revealerChild,
         indicator: Widget.EventBox({
             ...eventBoxProps,
             child: indicator,
@@ -47,7 +50,8 @@ export function createPopup({
             // see https://github.com/Aylur/ags/issues/59
             child: Widget.Box({
                 css: "padding: 1px;", 
-                child:revealer
+                child:revealer,
+                ...windowChildProps,
             }),
         }),
     }
