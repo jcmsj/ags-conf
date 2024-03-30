@@ -15,7 +15,8 @@ export function createPopup({
     revealerProps,
     eventBoxProps,
     windowChildProps,
-    initialyRevealed = false,
+    variableSource,
+    initiallyRevealed = false,
 }: {
     child: Gtk.Widget,
     indicator: Gtk.Widget,
@@ -24,10 +25,11 @@ export function createPopup({
     windowProps: Parameters<typeof Widget.Window>[0], 
     revealerProps: RevealerProps,
     eventBoxProps?: EventBoxProps,
-    initialyRevealed?: boolean,
+    initiallyRevealed?: boolean,
     windowChildProps?: Parameters<typeof Widget.Box>[0],
+    variableSource?: ReturnType<typeof Variable<boolean>>,
 }) {
-    const revealerChild = Variable(initialyRevealed)
+    const revealerChild = variableSource ?? Variable(initiallyRevealed)
     const revealer = Widget.Revealer({
         ...revealerProps,
         child: child,

@@ -19,24 +19,32 @@ export const sysTray = () => {
     });
 }
 
-export const Indicator =  () => Widget.Icon({
-    icon : 'go-up-symbolic'
-})
+export const Indicator =  (v:ReturnType<typeof Variable<boolean>>) => {
+    return Widget.Icon({
+        icon: v.bind()
+        .as(truthy => truthy ? 'go-down-symbolic' : 'go-up-symbolic') 
+    });
+}
 
-export const SysTray = () => createPopup({
-    child: sysTray(),
-    indicator: Indicator(),
-    windowProps: {
-        name: "systray",
-        anchor: ['bottom','right'],
-        hpack: "baseline",
-        css: "background: none",
-    },
-    revealerProps: {
-        transitionDuration: 200,
-        marginEnd: 110,
-        css: "padding: 0.2em;",
-        widthRequest: 100,
-        transition: 'slide_up',
-    },
-})
+export const SysTray = () => {
+    const revealChild = Variable(false);
+    const it = createPopup({
+        variableSource: revealChild, 
+        child: sysTray(),
+        indicator: Indicator(revealChild),
+        windowProps: {
+            name: "systray",
+            anchor: ['bottom', 'right'],
+            hpack: "baseline",
+            css: "background: none",
+        },
+        revealerProps: {
+            transitionDuration: 200,
+            marginEnd: 110,
+            css: "padding: 0.2em;",
+            widthRequest: 100,
+            transition: 'slide_up',
+        },
+    });
+    return it;
+}
