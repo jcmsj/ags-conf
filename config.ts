@@ -36,6 +36,10 @@ hyprland.connect("monitor-added", (h, name:string) => {
     console.log("Monitor is not found", name)
     return
   }
+  if (!monitor.dpmsStatus) {
+    console.log(`Monitor(${monitor.id}, ${name}) is off`)
+    return
+  }
   const exists = App.windows.find(w => w.name === `taskBar-${monitor.id}`)
   if (exists) {
     console.log("Taskbar already exists")
