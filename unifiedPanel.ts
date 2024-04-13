@@ -3,6 +3,7 @@ import { createPopup } from "./popup/popup.js"
 import * as bt from "./bluetooth.js"
 import * as brightness from "./brightness.js"
 import * as volume from './volume.js'
+import * as battery from './battery.js'
 export const UnifiedPanel = () => createPopup({
     indicator: Widget.Box({
         spacing: 2,
@@ -21,6 +22,7 @@ export const UnifiedPanel = () => createPopup({
             bt.PanelEntry(),
             brightness.PanelEntry(),
             volume.PanelEntry(),
+            battery.PanelEntry(),
         ],
     }),
     windowProps: {

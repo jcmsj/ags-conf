@@ -1,0 +1,7 @@
+- [x] Battery charging status
+- [ ] Monitor controls
+- [ ] notifications
+    - [ ] UI
+    - [ ] Cache
+    - [ ] TTS
+    - [ ] Messenger  integration(?)
