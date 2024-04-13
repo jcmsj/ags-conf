@@ -5,7 +5,7 @@ export const Slider = (props:SliderProps = {}) => Widget.Slider({
     ...props,
     hexpand: true,
     drawValue: false,
-    on_change: self => brightness.screen_value = Math.round(self.value),
+    on_change: self => brightness.screen_value = self.value,
     value: brightness.bind("screen_value"),
 });
 
