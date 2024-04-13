@@ -118,31 +118,44 @@ function groupedTaskBarItems() {
     })
 }
 
-export const taskBar = (monitor: number) => {
+export function Name(monitorid:number) {
+    return `taskbar-${monitorid}`
+}
+export const TaskBar = (monitorId: number) => {
     const clock = Clock()
     const unifiedPanel = UnifiedPanel()
     const systray = SysTray()
-    App.addWindow(unifiedPanel.window(monitor))
-    App.addWindow(clock.window(monitor))
-    App.addWindow(systray.window(monitor))
+    const uP = unifiedPanel.window(monitorId)
+    const clockWin = clock.window(monitorId)
+    const systrayWin = systray.window(monitorId)
+    App.addWindow(uP)
+    App.addWindow(clockWin)
+    App.addWindow(systrayWin)
     return Win({
-        name: `taskBar-${monitor}`,
-        monitor,
+        name: Name(monitorId),
+        monitor: monitorId,
         exclusivity: "exclusive",
         anchor: ['bottom', 'left', 'right'],
+        setup(self) {
+            self.on('destroy', self => {
+                uP.destroy()
+                clockWin.destroy()
+                systrayWin.destroy()
+            })
+        },
         child: Widget.CenterBox({
             startWidget: Widget.Box({
-                name: `left-${monitor}`,
+                name: `left-${monitorId}`,
                 children: [
                     PowerMenuButton(),
                     groupedTaskBarItems(),
                 ],
             }),
             centerWidget: Widget.Box({
-                name: `center-${monitor}`,
+                name: `center-${monitorId}`,
             }),
             endWidget: Widget.Box({
-                name: `right-${monitor}`,
+                name: `right-${monitorId}`,
                 spacing: 5,
                 marginEnd: 4,
                 hpack: "end",
