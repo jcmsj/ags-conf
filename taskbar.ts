@@ -10,16 +10,17 @@ import { SysTray } from "./systray.js"
 const hyprland = await Service.import('hyprland')
 const apps = await Service.import('applications')
 
-function focus(client:Client) {
+function focus(client: Client) {
     hyprland.messageAsync(`dispatch focuswindow address:${client.address}`)
 }
 const overrides = {
     byInitialClass: {
         "firefox-aurora": "Firefox DevEdition",
-        "org.gnome.nautilus":"Files",
+        "org.gnome.nautilus": "Files",
         "org.gnome.texteditor": "Text Editor",
     }
 }
+
 function item(client: Client) {
     const target = {
         initialTitle: client.initialTitle.toLowerCase(),
@@ -29,22 +30,28 @@ function item(client: Client) {
     }
 
     const override = overrides["byInitialClass"][target.initialClass]
-    let app:Application|undefined = undefined
+    let app: Application | undefined = undefined
     // check overrides
     if (override) app = apps.list.find(app => app.name === override)
     // by initial title
-    if (!app ) app= apps.list.find(app => {
+    if (!app) app = apps.list.find(app => {
         const name = app.name.toLowerCase()
         return name == target.initialTitle || name == target.initialClass || app.icon_name == target.class
     })
     // by initial class
     if (!app) app = apps.list.find(app => app.name.toLowerCase() === target.initialClass)
-    
+
     const data = {
         icon: app?.icon_name || "application-x-executable",
     }
-    return Widget.Button({
-        classNames: ["taskbar-item"],
+    const self = Widget.Button({
+        // will be used to toggle active class
+        attribute: {
+            clientAddress: client.address,
+        },
+        classNames: [
+            "taskbar-item",
+        ],
         name: `client-${client.address}`,
         child: Widget.Icon({
             icon: data.icon,
@@ -55,54 +62,30 @@ function item(client: Client) {
             focus(client)
         },
     })
+    return self
 }
 
-function clientByAddress(address:string) {
-    return hyprland.clients.find(client => client.address.localeCompare(address) === 0)
-}   
-function taskBarItems() {
-    return Widget.Box({
-        children: hyprland.clients.map(item),
-        setup: self =>
-            self.hook(hyprland, (w, address?: string) => {
-                // TODO: Sort
-                if (!address) return
-                const client = clientByAddress(address)
-                if (!client) return
-                console.log("Client added", client)
-                self.children = [...self.children, item(client)]
-            }, "client-added")
-        .hook(hyprland, (w, address?: string) => {
-            if (!address) return
-            self.children = self.children.filter(child =>
-                child.name !== `client-${address}`
-            )
-        }, "client-removed")
-    })
-}
 
 function groupByWorkspace(clients: Client[]) {
     return clients.reduce((acc, client) => {
         const workspace_box = acc[client.workspace.id]
         if (workspace_box !== undefined) {
+            // need to make a new array
             workspace_box.children = [...workspace_box.children, item(client)]
         } else {
             acc[client.workspace.id] = Widget.Box({
+                name: `workspace-${client.workspace.id}`,
                 classNames: ["taskbar-group"],
-                children:[item(client)]
+                children: [item(client)]
             })
         }
         return acc
-    }, {} as Record<string, ReturnType<typeof Widget.Box>>)
+    }, {} as Record<string, ReturnType<typeof Widget.Box<ReturnType<typeof item>>>>)
+}
+function asBoxes<T>(grouped: Record<string, T>) {
+    return Object.entries(grouped).map(([id, box]) => box)
 }
 function groupedTaskBarItems() {
-    function asBoxes(grouped: Record<string, ReturnType<typeof Widget.Box>>) {
-        return Object.entries(grouped).map(([id, box]) => Widget.Box({
-            children: [
-                box,
-            ]
-        }))
-    }
     return Widget.Box({
         children: asBoxes(groupByWorkspace(hyprland.clients)),
         setup: self => {
@@ -113,12 +96,31 @@ function groupedTaskBarItems() {
             self.hook(hyprland, (w, address?: string) => {
                 const grouped = groupByWorkspace(hyprland.clients)
                 self.children = asBoxes(grouped)
-        }, "client-removed")
+            }, "client-removed")
+            self.hook(hyprland, (data: string, name: string) => {
+                // https://wiki.hyprland.org/IPC/#events-list
+                if (name == "movewindow" || name == "movewindowv2") {
+                    const grouped = groupByWorkspace(hyprland.clients)
+                    self.children = asBoxes(grouped)
+                }
+            }, "event")
+            // update active class
+            const highlightActiveWindow = () => {
+                self.children.forEach(workspaceBox => {
+                    workspaceBox.children.forEach(taskbarItem => {
+                        taskbarItem.toggleClassName(
+                            "active", 
+                            taskbarItem.attribute?.clientAddress === hyprland.active.client.address
+                        )
+                    })
+                })
+            }
+            self.hook(hyprland.active.client, highlightActiveWindow)
         }
     })
 }
 
-export function Name(monitorid:number) {
+export function Name(monitorid: number) {
     return `taskbar-${monitorid}`
 }
 export const TaskBar = (monitorId: number) => {

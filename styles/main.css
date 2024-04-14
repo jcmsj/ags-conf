@@ -8,6 +8,10 @@
 .taskbar-item {
     font-size: 1.5rem;
 }
+
+.taskbar-item.active {
+    background-color: rgb(4, 66, 42);
+}
 /* TODO: fix nixos-btn font-size */
 .nixos-btn {
     font-size: 2rem;
