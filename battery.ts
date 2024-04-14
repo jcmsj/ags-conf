@@ -14,6 +14,11 @@ export function BatteryIndicator() {
     })
 }
 
+function secToHours(seconds:number) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return `${hours}hr ${minutes.toString().padStart(2, '0')}m`;
+}
 export function PanelEntry() {
     const timeTilFullCharge = battery.bind("time_remaining")
         .as(r => {
@@ -21,7 +26,7 @@ export function PanelEntry() {
                 return ""
             }
 
-            return `Time to full: ${r}`
+            return `${secToHours(r)} to full`
         });
     const icon = battery.bind("icon_name")
 
