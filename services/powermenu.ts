@@ -1,14 +1,16 @@
 
 
-export type PowerMenuAction = "sleep" | "reboot" | "logout" | "shutdown"
+export type PowerMenuAction = "sleep" | "reboot" | "logout" | "shutdown" | "dismiss"
 
 const Action:Record<PowerMenuAction, string> = {
     sleep: "systemctl suspend",
     reboot: "systemctl reboot",
     logout: "hyprctl dispatch exit",
     shutdown: "shutdown now",
+    dismiss: "", // do nothing
 }
 
+const hyprland = await Service.import('hyprland')
 export class PowerMenu extends Service {
     static {
         Service.register(this, {})
@@ -21,7 +23,9 @@ export class PowerMenu extends Service {
         //     logout: [logout.value, "Log Out"],
         //     shutdown: [shutdown.value, "Shutdown"],
         // }[action]
-        App.closeWindow("powermenu")
+        hyprland.monitors.forEach(monitor => {
+            App.removeWindow(`powermenu-${monitor.id}`)
+        })
         Utils.execAsync(Action[action])
         // this.notify("cmd")
         // this.notify("title")
@@ -29,10 +33,6 @@ export class PowerMenu extends Service {
         // App.closeWindow("powermenu")
         // App.openWindow("verification")
     }
-
-    // readonly shutdown = () => {
-    //     this.action("shutdown")
-    // }
 }
 
 export const powermenu = new PowerMenu

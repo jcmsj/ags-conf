@@ -1,7 +1,7 @@
 import { makeWinName } from "./utils.js"
 import {powermenu, PowerMenuAction} from "./services/powermenu.js"
 const hyprland = await Service.import('hyprland')
-export const SysBtn = (action:PowerMenuAction, icon:string) => Widget.Button({
+export const SysBtn = (action:PowerMenuAction, icon:string, args?:Parameters<typeof Widget.Button>['0']) => Widget.Button({
     classNames: ["sys-btn"],
     child: Widget.Box({
         spacing: 5,
@@ -17,6 +17,7 @@ export const SysBtn = (action:PowerMenuAction, icon:string) => Widget.Button({
     on_clicked() {
         powermenu.action(action)
     },
+    ...args
 })
 export const PowerMenuButton = () => Widget.Button({
     classNames: ["taskbar-item, nixos-btn"],
@@ -31,12 +32,13 @@ export const PowerMenuButton = () => Widget.Button({
 export const PowerMenu = () => Widget.Box({
     name: "powermenu-widget",
     vertical: true,
-    spacing: 5,
+    spacing: 6,
     children: [
-        // SysBtn("sleep", "system-lockscreen-symbolic"),
+        SysBtn("dismiss", "window-close-symbolic"),
+        SysBtn("shutdown", "system-shutdown-symbolic"),
         SysBtn("reboot", "system-reboot-symbolic"),
         SysBtn("logout", "system-log-out-symbolic"),
-        SysBtn("shutdown", "system-shutdown-symbolic"),
+        SysBtn("sleep", "Kanata_Logo"),
     ],
 })
 export const Name = makeWinName("powermenu")
@@ -46,14 +48,14 @@ export const PowerWindow = (monitor:{id:number}) =>  Widget.Window({
     name: Name(monitor),
     monitor: monitor.id,
     keymode: "exclusive",
+    anchor: [], // Leave empty to center the window
+    child: PowerMenu(),
     setup(self) {
         self.keybind("Escape", () => {
             toggle()
         })
-        self.get_focus()
+        self.grab_focus()
     },
-    anchor: [], // Leave empty to center the window
-    child: PowerMenu(),
 })
 
 export enum ToggleState {
