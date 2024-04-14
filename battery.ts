@@ -22,7 +22,7 @@ function secToHours(seconds:number) {
 export function PanelEntry() {
     const timeTilFullCharge = battery.bind("time_remaining")
         .as(r => {
-            if (battery.charged) {
+            if (!battery.charging || battery.charged) {
                 return ""
             }
 
