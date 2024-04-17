@@ -4,13 +4,14 @@ import * as bt from "./bluetooth.js"
 import * as brightness from "./brightness.js"
 import * as volume from './volume.js'
 import * as battery from './battery.js'
+import * as monitor from './monitors/index.js'
 export const UnifiedPanel = () => createPopup({
     indicator: Widget.Box({
         spacing: 2,
         children: [
             bt.Indicator(),
             network.Indicator(),
-            volume.Indicator()
+            volume.Indicator(),
         ],
     }),
     child: Widget.Box({
@@ -23,6 +24,7 @@ export const UnifiedPanel = () => createPopup({
             brightness.PanelEntry(),
             volume.PanelEntry(),
             battery.PanelEntry(),
+            monitor.Indicator(),
         ],
     }),
     windowProps: {

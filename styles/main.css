@@ -33,3 +33,16 @@
 .sys-btn {
     font-size: 2rem;
 }
+
+.monitor-window {
+    font-size: x-large;
+}
+.monitor-widget {
+    padding: 0.5rem 1rem;
+    background-color: rgb(4, 66, 42);
+    border-radius: 5%;
+}
+
+.monitor-swapper {
+    background: none;
+}
