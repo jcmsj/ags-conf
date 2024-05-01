@@ -1,5 +1,5 @@
-import { makeWinName } from "./utils.js"
 import {powermenu, PowerMenuAction} from "./services/powermenu.js"
+import { prepToggle } from "./utils/toggle.js"
 const hyprland = await Service.import('hyprland')
 export const SysBtn = (action:PowerMenuAction, icon:string, args?:Parameters<typeof Widget.Button>['0']) => Widget.Button({
     classNames: ["sys-btn"],
@@ -16,6 +16,7 @@ export const SysBtn = (action:PowerMenuAction, icon:string, args?:Parameters<typ
     }),
     on_clicked() {
         powermenu.action(action)
+        globalThis.togglePowerMenu()
     },
     ...args
 })
@@ -24,8 +25,11 @@ export const PowerMenuButton = () => Widget.Button({
     child: Widget.Icon({
         icon: "nixos-symbolic",
     }),
-    on_clicked() {
-        toggle()
+    attribute: {
+        togglePowermenu: prepToggle(Name, PowerWindow),
+    },
+    on_clicked(self) {
+        self.attribute.togglePowermenu()
     },
 })
 
@@ -41,49 +45,18 @@ export const PowerMenu = () => Widget.Box({
         SysBtn("sleep", "Kanata_Logo"),
     ],
 })
-export const Name = makeWinName("powermenu")
-
+export const Name = "powermenu"
 // Create a window in the center of the screen
-export const PowerWindow = (monitor:{id:number}) =>  Widget.Window({
-    name: Name(monitor),
-    monitor: monitor.id,
+export const PowerWindow = () =>  Widget.Window({
+    name: Name,
     keymode: "exclusive",
     anchor: [], // Leave empty to center the window
     child: PowerMenu(),
     setup(self) {
-        self.keybind("Escape", () => {
-            toggle()
-        })
+        self.keybind("Escape", prepToggle(Name, PowerWindow))
         self.grab_focus()
     },
 })
 
-export enum ToggleState {
-    Skipped,
-    Added,
-    Removed
-}
 
-/**
- * Opens or closes the power menu for all monitors
- */
-export function toggle() {
-    return hyprland.monitors.map((monitor) => {
-        if (monitor.dpmsStatus == false) {
-            console.log(`Monitor(${monitor.id}, ${monitor.name}) is off`)
-            return ToggleState.Skipped
-        }
-        const name = Name(monitor)
-        if (App.getWindow(name)) {
-            App.removeWindow(name)
-            console.log(`Removed ${name}`)
-            return ToggleState.Removed
-        } else {
-            App.addWindow(PowerWindow(monitor))
-            console.log(`Added ${name}`)
-            return ToggleState.Added
-        }
-    })
-}
-
-globalThis.togglePowerMenu = toggle
+globalThis.togglePowerMenu = prepToggle(Name, PowerWindow)

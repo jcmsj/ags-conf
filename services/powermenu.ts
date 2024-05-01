@@ -7,7 +7,7 @@ const Action:Record<PowerMenuAction, string> = {
     reboot: "systemctl reboot",
     logout: "hyprctl dispatch exit",
     shutdown: "shutdown now",
-    dismiss: "", // do nothing
+    dismiss: "echo dismiss", // do nothing
 }
 
 const hyprland = await Service.import('hyprland')
@@ -17,15 +17,6 @@ export class PowerMenu extends Service {
     }
 
     action(action: PowerMenuAction) {
-        // [this.#cmd, this.#title] = {
-        //     sleep: [sleep.value, "Sleep"],
-        //     reboot: [reboot.value, "Reboot"],
-        //     logout: [logout.value, "Log Out"],
-        //     shutdown: [shutdown.value, "Shutdown"],
-        // }[action]
-        hyprland.monitors.forEach(monitor => {
-            App.removeWindow(`powermenu-${monitor.id}`)
-        })
         Utils.execAsync(Action[action])
         // this.notify("cmd")
         // this.notify("title")
