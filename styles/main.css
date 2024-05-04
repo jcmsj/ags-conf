@@ -12,9 +12,9 @@
 .taskbar-item.active {
     background-color: rgb(4, 66, 42);
 }
-/* TODO: fix nixos-btn font-size */
-.nixos-btn {
-    font-size: 2rem;
+
+.nixos-btn-icon {
+    font-size: 1.5rem;
 }
 
 .taskbar-group {
@@ -29,7 +29,9 @@
 .powermenu-btn {
     background-color: @primary-color;
 } */
-
+.powermenu {
+    padding: 0.5rem;
+}
 .sys-btn {
     font-size: 2rem;
 }

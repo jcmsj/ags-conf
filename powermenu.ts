@@ -24,6 +24,7 @@ export const PowerMenuButton = () => Widget.Button({
     classNames: ["taskbar-item, nixos-btn"],
     child: Widget.Icon({
         icon: "nixos-symbolic",
+        classNames: ["nixos-btn-icon"],
     }),
     attribute: {
         togglePowermenu: prepToggle(Name, PowerWindow),
@@ -35,6 +36,7 @@ export const PowerMenuButton = () => Widget.Button({
 
 export const PowerMenu = () => Widget.Box({
     name: "powermenu-widget",
+    classNames: ["powermenu"],
     vertical: true,
     spacing: 6,
     children: [
