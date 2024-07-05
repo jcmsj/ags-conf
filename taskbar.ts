@@ -48,6 +48,7 @@ function item(client: Client) {
         // will be used to toggle active class
         attribute: {
             clientAddress: client.address,
+            initialClass: client.initialClass,
         },
         classNames: [
             "taskbar-item",
@@ -65,13 +66,20 @@ function item(client: Client) {
     return self
 }
 
-
+function sortByInitialClass<T extends {attribute:{ initialClass: string}}>(...clients: T[]) {
+    return clients.sort((a, b) => {
+        if (a.attribute.initialClass < b.attribute.initialClass) return -1
+        if (a.attribute.initialClass > b.attribute.initialClass) return 1
+        return 0
+    })
+}
+// function groupBy
 function groupByWorkspace(clients: Client[]) {
     return clients.reduce((acc, client) => {
         const workspace_box = acc[client.workspace.id]
         if (workspace_box !== undefined) {
-            // need to make a new array
-            workspace_box.children = [...workspace_box.children, item(client)]
+            // need to make a new arrayr
+            workspace_box.children = sortByInitialClass(...workspace_box.children, item(client))
         } else {
             acc[client.workspace.id] = Widget.Box({
                 name: `workspace-${client.workspace.id}`,
