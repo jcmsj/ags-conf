@@ -1,5 +1,4 @@
 
-
 export type PowerMenuAction = "sleep" | "reboot" | "logout" | "shutdown" | "dismiss"
 
 const Action:Record<PowerMenuAction, string> = {
@@ -10,7 +9,6 @@ const Action:Record<PowerMenuAction, string> = {
     dismiss: "echo dismiss", // do nothing
 }
 
-const hyprland = await Service.import('hyprland')
 export class PowerMenu extends Service {
     static {
         Service.register(this, {})
