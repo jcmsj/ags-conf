@@ -13,3 +13,7 @@ if you do not want typechecking only suggestions
 
 types are symlinked to:
 /home/jcsan/.local/share/com.github.Aylur.ags/types
+
+## Development
+1. Install`tsc` globally
+2. run `tsc -w`
