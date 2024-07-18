@@ -13,34 +13,15 @@ const apps = await Service.import('applications')
 function focus(client: Client) {
     hyprland.messageAsync(`dispatch focuswindow address:${client.address}`)
 }
-const overrides = {
-    byInitialClass: {
-        "firefox-aurora": "Firefox DevEdition",
-        "org.gnome.nautilus": "Files",
-        "org.gnome.texteditor": "Text Editor",
-    }
-}
 
 function item(client: Client) {
-    const target = {
-        initialTitle: client.initialTitle.toLowerCase(),
-        initialClass: client.initialClass.toLowerCase(),
-        title: client.title.toLowerCase(),
-        class: client.class.toLowerCase(),
+    let candidates = apps.query(client.initialTitle);
+
+    if (candidates.length === 0) {
+        candidates = apps.query(client.initialClass)
     }
 
-    const override = overrides["byInitialClass"][target.initialClass]
-    let app: Application | undefined = undefined
-    // check overrides
-    if (override) app = apps.list.find(app => app.name === override)
-    // by initial title
-    if (!app) app = apps.list.find(app => {
-        const name = app.name.toLowerCase()
-        return name == target.initialTitle || name == target.initialClass || app.icon_name == target.class
-    })
-    // by initial class
-    if (!app) app = apps.list.find(app => app.name.toLowerCase() === target.initialClass)
-
+    const app: Application | undefined = candidates.length ? candidates[0]: undefined
     const data = {
         icon: app?.icon_name || "application-x-executable",
     }
@@ -78,7 +59,7 @@ function groupByWorkspace(clients: Client[]) {
     return clients.reduce((acc, client) => {
         const workspace_box = acc[client.workspace.id]
         if (workspace_box !== undefined) {
-            // need to make a new arrayr
+            // need to make a new array
             workspace_box.children = sortByInitialClass(...workspace_box.children, item(client))
         } else {
             acc[client.workspace.id] = Widget.Box({
@@ -102,8 +83,9 @@ function groupedTaskBarItems() {
                 self.children = asBoxes(grouped)
             }, "client-added")
             self.hook(hyprland, (w, address?: string) => {
-                const grouped = groupByWorkspace(hyprland.clients)
-                self.children = asBoxes(grouped)
+                self.children.map(
+                    box => box.children
+                    .find(item => item.attribute.clientAddress === address)?.destroy())
             }, "client-removed")
             self.hook(hyprland, (data: string, name: string) => {
                 // https://wiki.hyprland.org/IPC/#events-list
