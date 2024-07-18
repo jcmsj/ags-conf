@@ -1,3 +1,4 @@
+import { NotificationPopups } from "./notification.js";
 import { TaskBar, Name as TaskBarName } from "./taskbar.js";
 const hyprland = await Service.import('hyprland')
 const styleRoot = `${App.configDir}/styles`
@@ -7,6 +8,7 @@ App.addIcons(`${App.configDir}/assets`)
 App.config({
   windows: [
     ...hyprland.monitors.map(monitor => TaskBar(monitor.id)),
+    ...hyprland.monitors.map(monitor => NotificationPopups(monitor.id)),
   ],
   onConfigParsed(app) {
     App.applyCss(css)
