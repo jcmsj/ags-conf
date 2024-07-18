@@ -53,11 +53,13 @@ function notif(n: Notification) {
     })
 
     const body = Widget.Label({
-        class_name: "body",
+        class_name: "notification-body",
         hexpand: true,
         use_markup: true,
         xalign: 0,
         justification: "left",
+        // https://github.com/Aylur/ags/issues/411
+        max_width_chars: 24,
         label: n.body,
         wrap: true,
     })

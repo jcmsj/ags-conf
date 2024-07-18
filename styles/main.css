@@ -67,11 +67,11 @@ window.notification-popups box.notifications {
     color: @theme_fg_color;
 }
 
-.notification-icon box {
+/* .notification-icon box {
     min-width: 2rem;
     min-height: 2rem;
     border-radius: 7px;
-}
+} */
 
 .notification {
     min-width: 20rem;
@@ -88,10 +88,10 @@ window.notification-popups box.notifications {
 
 .notification .title {
     color: @theme_fg_color;
-    font-size: 1.24em;
+    font-size: 1.2em;
 }
 
-.notification .body {
+.notification-body {
     color: @theme_unfocused_fg_color;
 }
 
