@@ -84,8 +84,13 @@ function groupedTaskBarItems() {
             }, "client-added")
             self.hook(hyprland, (w, address?: string) => {
                 self.children.map(
-                    box => box.children
-                    .find(item => item.attribute.clientAddress === address)?.destroy())
+                    box => {
+                        box.children
+                            .find(item => item.attribute.clientAddress === address)?.destroy()
+                        if (box.children.length === 0) {
+                            box.destroy()
+                        }
+                    })
             }, "client-removed")
             self.hook(hyprland, (data: string, name: string) => {
                 // https://wiki.hyprland.org/IPC/#events-list
