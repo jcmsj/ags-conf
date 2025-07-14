@@ -1,4 +1,5 @@
 import { For,Accessor, createBinding } from "ags";
+import { Gtk } from "ags/gtk4";
 import Tray from "gi://AstalTray";
 export function TrayPanel() {
     const tray = Tray.get_default();
@@ -9,7 +10,7 @@ export function TrayPanel() {
         <menubutton widthRequest={5} heightRequest={5} tooltipText="Tray Options">
             <image iconName="pan-down-symbolic"/>
             <popover>
-                <box orientation="vertical" class={'text-left'}>
+                <box orientation={Gtk.Orientation.VERTICAL} class={'text-left'}>
                     <For each={items}>
                         {(item) => (
                             <button

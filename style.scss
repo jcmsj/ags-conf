@@ -2,6 +2,7 @@
 $fg-color: #{"@theme_fg_color"};
 $bg-color: #{"@theme_bg_color"};
 $border-radius: 16px;
+
 window {
   // default font size: 11, font family: iosevka
   font-size: 14px;
@@ -13,7 +14,7 @@ window.Bar {
   color: $fg-color;
   font-weight: bold;
 
-  > centerbox {
+  >centerbox {
     margin: 4px;
   }
 }
@@ -23,6 +24,7 @@ window.Bar {
   background-color: color-mix(in srgb, $bg_color 60%, transparent);
   border-radius: $border-radius;
   padding: 1px 8px;
+
   &:hover {
     background-color: color-mix(in srgb, $bg_color 90%, transparent);
   }
@@ -39,17 +41,22 @@ button {
   background: none;
 }
 
-
 .flip-180 {
   transform: rotate(180deg);
 }
 
-.DateTime {
-  
-}
-
 .WorkspaceButton {
-    &.ActiveWindow {
-      background-color: $bg-color; // no transparency
-    }
+  &.ActiveWindow {
+    background-color: $bg-color; // no transparency
+  }
+
+  &.Switcher {
+    width: 40px;
+    height: 200px;
+  }
+}
+.Switcher {
+  .WindowTitle {
+    font-size: 22px;
+  };
 }
