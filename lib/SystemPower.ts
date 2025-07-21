@@ -6,7 +6,7 @@ export type PowerMenuAction = "sleep" | "reboot" | "logout" | "shutdown"
 const Action:Record<PowerMenuAction, string> = {
     sleep: "systemctl suspend",
     reboot: "systemctl reboot",
-    logout: "niri msg action quit",
+    logout: "swaylock",
     shutdown: "poweroff",
 }
 
