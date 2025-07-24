@@ -37,7 +37,7 @@ export default class NiriWorkspaceHandler extends GObject.Object {
             }
 
             if (ev.WorkspaceActiveWindowChanged) {
-                console.log("WorkspaceActiveWindowChanged", ev.WorkspaceActiveWindowChanged);
+                // console.log("WorkspaceActiveWindowChanged", ev.WorkspaceActiveWindowChanged);
                 const { workspace_id, active_window_id } = ev.WorkspaceActiveWindowChanged;
                 const workspace = this.#workspaces[workspace_id];
                 if (workspace) {
@@ -47,7 +47,7 @@ export default class NiriWorkspaceHandler extends GObject.Object {
             }
 
             if (ev.WorkspaceActivated) {
-                console.log("WorkspaceActivated", ev.WorkspaceActivated);
+                // console.log("WorkspaceActivated", ev.WorkspaceActivated);
                 // find current active workspace
                 // set is_focused to false
                 const prevActiveWorkspace = Object.values(this.#workspaces)

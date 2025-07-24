@@ -41,7 +41,7 @@ export default class NiriWindowHandler extends GObject.Object {
     listen() {
         this.#handle = niriEventStream((ev) => {
             if (ev.WindowOpenedOrChanged) {
-                console.log("WindowOpenedOrChanged", ev)
+                // console.log("WindowOpenedOrChanged", ev)
                 const win = ev.WindowOpenedOrChanged.window;
                 const existingIndex = this.windows.findIndex(w => w.id === win.id)
                 if (existingIndex >= 0) {
@@ -57,7 +57,7 @@ export default class NiriWindowHandler extends GObject.Object {
                     this.activeWindow = win.id
                 }
             } else if (ev.WindowFocusChanged) {
-                console.log("WindowFocusChanged")
+                // console.log("WindowFocusChanged")
                 this.activeWindow = ev.WindowFocusChanged.id
                 this.windows = this.windows.map(w => {
                     if (w.id === ev.WindowFocusChanged!.id) {
@@ -66,10 +66,10 @@ export default class NiriWindowHandler extends GObject.Object {
                     return { ...w, is_focused: false };
                 });
             } else if (ev.WindowClosed) {
-                console.log("WindowClosed")
+                // console.log("WindowClosed")
                 this.windows = this.windows.filter(w => w.id !== ev.WindowClosed!.id)
             } else if (ev.WindowsChanged) {
-                console.log("WindowsChanged")
+                // console.log("WindowsChanged")
                 this.windows = ev.WindowsChanged.windows
             }
         })

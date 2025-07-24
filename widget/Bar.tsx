@@ -10,7 +10,7 @@ import { TrayPanel } from "./Tray"
 import { WorkspacePanel } from "./Workspace"
 const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
 export default function Bar({gdkmonitor}: { gdkmonitor: Gdk.Monitor }) {
-    console.log(gdkmonitor.connector, gdkmonitor.geometry.x, gdkmonitor.geometry.y)
+    // console.log(gdkmonitor.connector, gdkmonitor.geometry.x, gdkmonitor.geometry.y)
 
   return (
     <window

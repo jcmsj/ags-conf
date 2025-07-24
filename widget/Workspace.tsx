@@ -11,8 +11,11 @@ export function WorkspacePanel({ monitor }: { monitor: Gdk.Monitor }) {
     const allWindows = createBinding(niri, "windows");
     const windows = createComputed([workspaces, allWindows], (workspaces, allWindows) => {
         const workspacesInMonitor = Object.values(workspaces)
-            .filter((ws) => ws.output == monitor.connector);
-            console.log("Workspaces in monitor:", workspacesInMonitor);
+            .filter((ws) => ws.output == monitor.connector).sort(
+                // sort by workspace index
+                (a, b) => a.idx - b.idx
+            );
+            // console.log("Workspaces in monitor:", workspacesInMonitor);
 
         const windowsForAllWorkspaces = workspacesInMonitor.flatMap((ws) =>
             allWindows.filter((window) => 
