@@ -35,7 +35,6 @@ export default class NiriWindowHandler extends GObject.Object {
     @setter(Number)
     set activeWindow(value: number) {
         this.#activeWindow = value ?? -1;
-        this.notify('activeWindow');
     }
 
     listen() {
