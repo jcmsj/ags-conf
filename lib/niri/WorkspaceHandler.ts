@@ -69,7 +69,7 @@ export default class NiriWorkspaceHandler extends GObject.Object {
     }
 
     onWorkspacesChanged(e: Exclude<NiriEvent["WorkspacesChanged"], undefined>) {
-        console.log("WorkspacesChanged", e.workspaces);
+        // console.log("WorkspacesChanged", e.workspaces);
         this.#workspaces = {};
         e.workspaces.forEach((ws: NiriWorkspace) => {
             this.#workspaces[ws.id] = ws;
@@ -81,7 +81,6 @@ export default class NiriWorkspaceHandler extends GObject.Object {
     constructor() {
         super();
         this.listen();
-        this.notify('ready');
     }
 
     destroy() {

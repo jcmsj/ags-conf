@@ -84,7 +84,6 @@ export default class NiriWindowHandler extends GObject.Object {
         super()
         // Initialize any properties or state here
         this.listen();
-        this.notify('ready');
     }
 
     destroy() {
